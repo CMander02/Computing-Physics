@@ -115,11 +115,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="RandomDB.h" />
+    <ClInclude Include="RandomJS.h" />
+    <ClInclude Include="RandomNumberJS.h" />
+    <ClInclude Include="SamplingJS.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="RandomNumberDB.cpp" />
+    <ClCompile Include="RandomNumberJS.cpp" />
+    <ClCompile Include="Sampling.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

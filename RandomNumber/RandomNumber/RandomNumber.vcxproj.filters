@@ -18,12 +18,21 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="RandomNumberDB.cpp">
+    <ClCompile Include="RandomNumberJS.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Sampling.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RandomDB.h">
+    <ClInclude Include="RandomJS.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SamplingJS.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomNumberJS.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
