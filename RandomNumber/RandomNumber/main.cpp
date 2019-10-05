@@ -8,19 +8,24 @@ using namespace randomjs;//使用自己random库的命名空间
 
 int main()
 {
+	double x, y, z;
+	ofstream output(".\\BallSurface.txt");//windows系统下用双斜杠
 	clock_t startTime, endTime;
 	startTime = clock();
-
-	ofstream output(".\\Rand.txt");
-	for (int i = 0; i < 1000000; i++)
+	for (int i = 0; i < 10000;)
 	{
 		//因为int值只有离散的9位，输出10位足够分析
-		output << setprecision(10) << RandomSchrage() << endl;
+		//if (BallSurfaceMarsaglia(x, y, z)) 
+		//{
+		//	
+		//	i++;
+		//}
+		BallSurface(x, y, z);
+		output << '{' << setprecision(10) << x << ',' << y << ',' << z << '}' << ',';
+		i++;
 	}
-	output.close();
-
-
 	endTime = clock();//计时结束
+	output.close();
 	cout << "The run time is: " << (double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << endl;
 	getchar();
 }
