@@ -2,13 +2,14 @@
 #include<vector>//用来保存在Fibonacci数列中的预先项
 namespace randomjs //防止日后调库的命名冲突
 {
+	//*********************以下部分都是在生成随机数***************************
 	constexpr int m = 2147483647;
 	constexpr int a = 16807;
 	constexpr int b = 0;
 	constexpr int q = m / a;
 	constexpr int r = m % a;
-	static int seed = int(time(NULL)) % m>0? int(time(NULL)) % m:int(time(NULL)) % m +m;
-	
+	static int seed = int(time(NULL)) % m > 0 ? int(time(NULL)) % m : int(time(NULL)) % m + m;
+
 	int RandomSchrageInt()//Schrage算法的int版本
 	{
 		int temp = a * (seed%q) - r * (seed / q);//通过公式使得运算中每一项都安全
@@ -31,7 +32,7 @@ namespace randomjs //防止日后调库的命名冲突
 	static int head = 0, tail = (p_fib - q_fib) % size;
 	static bool init = false;
 
-	double RandomFibonacci() 
+	double RandomFibonacci()
 	{
 		if (!init)//利用Schrage算法来进行初始化
 		{
@@ -53,4 +54,6 @@ namespace randomjs //防止日后调库的命名冲突
 	{
 		seed = in;
 	}
+
+	//*********************以上部分都是在生成随机数***************************
 }
