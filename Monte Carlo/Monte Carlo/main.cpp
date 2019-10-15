@@ -1,61 +1,45 @@
-#include"RandomJS.h"
 #include<iostream>
 #include<fstream>
 #include<iomanip>
+#include<vector>
+#include<cmath>
+#include"Bound.h"
+
 using namespace std;
-using namespace randomjs;
-#define PI 3.1415926535
 
-double StrangeFunction(double x)
+double MonteCarloIntegrate(double func(std::vector<double>&), std::initializer_list<Bound> list, int cycle=1e5);//参数分别为传入的函数，边界，循环次数
+
+double f(vector<double> &vec)//这样的写法比较丑陋，但目前还没有想到很好的解决办法，主要是可变长参数传递会难以生成随机数
 {
-	if (x <= -1 || x >= 2)
-	{
-		std::cout << "x is out of bound!" << endl;
-		return 0;
-	}
-	else
-	{
-		return 1.0 / 2 / PI * pow(2 - x, -5 / 6.0) * pow(x + 1, -1.0/6);
-	}
+	return sqrt(vec[0] + sqrt(vec[0]));
 }
 
-double f(double x)
+double g(vector<double> &vec)//使用vector传参是不得已的，希望能有更加自然的写法
 {
-	if (x <= -1 || x >= 2)
+	double temp = 6;
+	for (auto c : vec)
 	{
-		std::cout << "x is out of bound!" << endl;
-		return 0;
+		temp -= c * c;
 	}
-	else
-	{
-		return 3*PI / 2 / sqrt(2 - x) / sqrt(x + 1);
-	}
+	return temp;
 }
 
-bool getX(double &x)
-{
-	x = (1 - cos(PI*RandomSchrage())*3.0) / 2.0;
-	return RandomFibonacci()*f(x) < StrangeFunction(x);
-}
 
 int main()
 {
-	ofstream out(".//rand.txt");
-	double temp;
+	ofstream out(".//result2.txt");
 	clock_t startTime, endTime;
 	startTime = clock();
-	for (int i = 1; i < 1000000;)
-	{
-		if (getX(temp))
-		{
-			out << setprecision(10) << temp << endl;
-			i++;
-		}
-	}
+	cout << setprecision(9);//设置输出精度
+
+	cout << MonteCarloIntegrate(f, { Bound(0, 2) },10e4) << endl;
+
+	cout << MonteCarloIntegrate(g, { Bound(0,0.9),Bound(0,0.8),Bound(0,0.9),Bound(0,2),Bound(0,1.3) },1e4) << endl;
+
 	endTime = clock();
 	cout << "The run time is: " << (double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << endl;
 	out.close();
 
-	
+
 	system("pause");
 }
