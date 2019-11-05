@@ -86,7 +86,7 @@ public:
 		return *this;
 	}
 	
-	virtual ~Vector()
+	~Vector()
 	{
 		delete[] coordinates;
 		coordinates = nullptr;
@@ -284,10 +284,10 @@ double operator*(const Vector<dimension>&l, const Vector<dimension>&r)
 }
 
 
-Vector<3> cross(const Vector<3>&l, const Vector<3>&r)
-{
-	return Vector<3>({ l[1] * r[2] - l[2] * r[1], l[2] * r[3] - l[3] * r[2], l[3] * r[1] - l[1] * r[3] });
-}
+//extern Vector<3> cross(const Vector<3>&l, const Vector<3>&r)
+//{
+//	return Vector<3>({ l[1] * r[2] - l[2] * r[1], l[2] * r[3] - l[3] * r[2], l[3] * r[1] - l[1] * r[3] });
+//}
 
 template<unsigned dim>
 Vector<dim> RandomVectorOnBall(double length = 1)

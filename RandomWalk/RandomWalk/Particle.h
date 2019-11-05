@@ -13,16 +13,17 @@ enum MOVE_TYPE
 };//四种类型的意义大约写得和丁老师的讲义一样令人易于理解，不需要做任何解释
 
 template<unsigned dimension>
-class Particle:public Vector<dimension>
+class Particle
 {
-	using Vector<dimension>::coordinates;
 public:
 	Particle() = default;//不提供任何构造函数，静待系统合成
 
-	Particle(std::initializer_list<double> list) :Vector<dimension>(list) {}
-	virtual ~Particle() = default;
+	Particle(std::initializer_list<double> list) :coordinates(list) {}
+	Particle(Vector<dimension> &in_vec):coordinates(in_vec) {}
+	Particle(Vector<dimension> &&in_vec) :coordinates(std::move(in_vec)) {}
+	~Particle() = default;
 
-	virtual void move(MOVE_TYPE type = ON_GRID)//未来有继承此类的考虑
+	Particle& move(MOVE_TYPE type = ON_GRID)//未来有继承此类的考虑
 	{
 		double dis = 1.0 / dimension;
 		int i = 0;
@@ -44,7 +45,7 @@ public:
 			}
 			break;
 		case CONTINUOUS_DIRECTION:
-			*this += step * RandomVectorOnBall<dimension>()*(2 * RandomSchrage() - 1);
+			coordinates += step * RandomVectorOnBall<dimension>()*(2 * RandomSchrage() - 1);
 			break;
 		case CONTINUOUS_DISTANCE:
 			while (i*dis < level)
@@ -59,24 +60,30 @@ public:
 			}
 			break;
 		case CONTINUOUS_ALL:
-			*this += l * RandomVectorOnBall<dimension>()*(2 * RandomSchrage() - 1);
+			coordinates += l * RandomVectorOnBall<dimension>()*(2 * RandomSchrage() - 1);
 			break;
 		}
+		return *this;
 
 	}
 	//virtual void move(Field<dimension>&);
 
-	//double operator[](int i)
-	//{
-	//	return coordinates[i];
-	//}
+	double operator[](int i)
+	{
+		return coordinates[i];
+	}
+
+	Vector<dimension>& get_position()
+	{
+		return coordinates;
+	}
 
 private:
 	
 
 	double step = 1;
 
-	//Vector<dimension> coordinates;
+	Vector<dimension> coordinates;
 	
 };
 
