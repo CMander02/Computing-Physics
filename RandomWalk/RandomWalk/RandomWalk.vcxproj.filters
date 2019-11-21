@@ -50,7 +50,10 @@
     <ClCompile Include="animation.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="dimension_move.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DLA.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

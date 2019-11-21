@@ -8,6 +8,7 @@ using namespace randomjs;
 using std::initializer_list;
 using std::ostream;
 using std::cout;
+#define EPSILON 1E-9
 
 template<unsigned dimension>
 class Vector;
@@ -66,7 +67,7 @@ public:
 		}
 	}
 
-	Vector operator= (const Vector& in)
+	Vector operator= (Vector in)
 	{
 		Vector temp(in);
 		swap(*this, in);
@@ -79,12 +80,6 @@ public:
 		rvec.coordinates = nullptr;
 	}
 
-	Vector operator= (Vector&& in)
-	{
-		Vector temp(in);
-		swap(*this, in);
-		return *this;
-	}
 	
 	~Vector()
 	{
@@ -254,16 +249,25 @@ Vector<dimension> operator/(const Vector<dimension>&r, double lambda)
 }
 
 template<unsigned dimension>
-inline bool operator==(const Vector<dimension>& l, const Vector<dimension>& r)
+inline bool operator==(const Vector<dimension>& l, const Vector<dimension>& r)//此处优化的效果是十分明显的
 {
 	for (int i = 0; i < dimension; i++)
 	{
-		if (l[i]!=r[i])
+		auto temp = l[i] - r[i];
+		if (( temp>0 ? temp : -temp) > EPSILON)
 		{
 			return false;
 		}
 	}
 	return true;
+	//for (int i = 0; i < dimension; i++)
+	//{
+	//	if (l[i]!=r[i])
+	//	{
+	//		return false;
+	//	}
+	//}
+	//return true;
 }
 
 template<unsigned dimension>
@@ -298,5 +302,16 @@ Vector<dim> RandomVectorOnBall(double length = 1)
 		temp[i] = RandomGauss();
 	}
 	temp /= temp.length();
+	return temp * length;
+}
+
+template<unsigned dim>
+Vector<dim> RandomVectorOnGridBall(double length = 1)//在格点球上均匀分布的矢量
+{
+	Vector<dim> temp = RandomVectorOnBall<dim>(length);
+	for (int i = 0; i < dim; i++)
+	{
+		temp[i] = int(temp[i] + 0.4999);
+	}
 	return temp;
 }

@@ -21,6 +21,14 @@ public:
 	Particle(std::initializer_list<double> list) :coordinates(list) {}
 	Particle(Vector<dimension> &in_vec):coordinates(in_vec) {}
 	Particle(Vector<dimension> &&in_vec) :coordinates(std::move(in_vec)) {}
+
+	Particle& operator= (const Particle& p) { step = p.step; coordinates = p.coordinates; return *this; }
+	Particle& operator= (const Particle&& p) { step = p.step; coordinates = std::move(p.coordinates); return *this; }
+
+
+	Particle(const Particle& p) :step(p.step), coordinates(p.coordinates) {}
+	Particle(Particle&& p) :step(p.step), coordinates(std::move(p.coordinates)) {}
+
 	~Particle() = default;
 
 	Particle& move(MOVE_TYPE type = ON_GRID)//未来有继承此类的考虑
@@ -78,6 +86,16 @@ public:
 		return coordinates;
 	}
 
+	Vector<dimension> get_position() const
+	{
+		return coordinates;
+	}
+
+	bool operator==(const Particle& r)
+	{
+		return coordinates == r.coordinates;
+	}
+
 private:
 	
 
@@ -86,4 +104,3 @@ private:
 	Vector<dimension> coordinates;
 	
 };
-

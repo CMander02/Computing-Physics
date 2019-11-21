@@ -1,5 +1,6 @@
 #include<ctime>
 #include<vector>//用来保存在Fibonacci数列中的预先项
+#include "RandomNumberJS.h"
 namespace randomjs //防止日后调库的命名冲突
 {
 	//*********************以下部分都是在生成随机数***************************
@@ -48,6 +49,11 @@ namespace randomjs //防止日后调库的命名冲突
 		head = (head + 1) % size;
 		tail = (tail + 1) % size;
 		return temp / double(m);
+	}
+
+	double RandomGauss(double mu, double sigma)
+	{
+		return sigma * sqrt(-2 * log(RandomSchrage()))*CosRandom() + mu;
 	}
 
 	void SetSeed(int in)
