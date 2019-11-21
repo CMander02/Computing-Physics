@@ -4,6 +4,10 @@ namespace randomjs //防止日后调库的命名冲突
 {
 	double RandomSchrage();
 	double RandomFibonacci();
+	double RandomGauss(double mu = 0, double sigma = 1);
+	double RandomExp();
+	double RandomLorentz();
+	double RandomCos();
 	void SetSeed(int seed);
 }
 
