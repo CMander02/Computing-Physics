@@ -74,7 +74,7 @@ public:
 		return *this;
 	}
 
-	Vector(Vector&& rvec)
+	Vector(Vector&& rvec) noexcept
 	{
 		coordinates = rvec.coordinates;
 		rvec.coordinates = nullptr;

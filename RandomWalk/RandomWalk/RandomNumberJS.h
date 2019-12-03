@@ -3,6 +3,7 @@
 namespace randomjs //防止日后调库的命名冲突
 {
 	double RandomSchrage();
+	int RandomSchrageInt();
 	double RandomFibonacci();
 	double CosRandom();//先进行随机数，然后进行Cos变换的结果
 	double RandomGauss(double mu = 0, double sigma = 1);

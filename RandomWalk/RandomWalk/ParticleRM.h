@@ -20,10 +20,10 @@ public:
 
 	ParticleRM(std::initializer_list<double> list) :coordinates(list) {}
 	ParticleRM(Vector<dimension> &in_vec):coordinates(in_vec) {}
-	ParticleRM(Vector<dimension> &&in_vec) :coordinates(std::move(in_vec)) {}
+	ParticleRM(Vector<dimension> &&in_vec)noexcept :coordinates(std::move(in_vec)){}
 
 	ParticleRM& operator= (const ParticleRM& p) { step = p.step; coordinates = p.coordinates; return *this; }
-	ParticleRM& operator= (const ParticleRM&& p) { step = p.step; coordinates = std::move(p.coordinates); return *this; }
+	ParticleRM& operator= (const ParticleRM&& p) noexcept { step = p.step; coordinates = std::move(p.coordinates); return *this; }
 
 
 	ParticleRM(const ParticleRM& p) :step(p.step), coordinates(p.coordinates) {}
@@ -31,59 +31,22 @@ public:
 
 	virtual ~ParticleRM() = default;
 
-	ParticleRM& move(MOVE_TYPE type = ON_GRID)//未来有继承此类的考虑
-	{
-		double dis = 1.0 / dimension;
-		int i = 0;
-		double level = RandomFibonacci();//随机选取一个维度进行行走
-		double l = step * RandomSchrage();
-
-		switch (type)
-		{
-		case ON_GRID:
-			while (i*dis < level)
-				i++;
-			if (RandomSchrage() > 0.5)
-			{
-				coordinates[i - 1] += step;
-			}
-			else
-			{
-				coordinates[i - 1] -= step;
-			}
-			break;
-		case CONTINUOUS_DIRECTION:
-			coordinates += RandomVectorOnBall<dimension>(step);
-			break;
-		case CONTINUOUS_DISTANCE:
-			while (i*dis < level)
-				i++;
-			if (RandomSchrage() > 0.5)
-			{
-				coordinates[i - 1] += l;
-			}
-			else
-			{
-				coordinates[i - 1] -= l;
-			}
-			break;
-		case CONTINUOUS_ALL:
-			coordinates +=  RandomVectorOnBall<dimension>(l);
-			break;
-		}
-		return *this;
-
-	}
-	//virtual void move(Field<dimension>&);
+	ParticleRM& move(MOVE_TYPE type = ON_GRID);//未来有继承此类的考虑
+	
 
 	double operator[](int i)
 	{
 		return coordinates[i];
 	}
 
-	Vector<dimension>& get_position()
+	Vector<dimension>& get_position()//加速参数的获取
 	{
 		return coordinates;
+	}
+
+	double get_step() const
+	{
+		return step;
 	}
 
 	Vector<dimension> get_position() const
@@ -96,10 +59,55 @@ public:
 		return coordinates == r.coordinates;
 	}
 
-private:
+protected:
 
 	double step = 1;
 
 	Vector<dimension> coordinates;
 	
 };
+
+template<unsigned dimension>
+ParticleRM<dimension> & ParticleRM<dimension>::move(MOVE_TYPE type)
+{
+	double dis = 1.0 / dimension;
+	int i = 0;
+	double level = RandomFibonacci();//随机选取一个维度进行行走
+	double l = step * RandomSchrage();
+
+	switch (type)
+	{
+	case ON_GRID:
+		while (i*dis < level)
+			i++;
+		if (RandomSchrage() > 0.5)
+		{
+			coordinates[i - 1] += step;
+		}
+		else
+		{
+			coordinates[i - 1] -= step;
+		}
+		break;
+	case CONTINUOUS_DIRECTION:
+		coordinates += RandomVectorOnBall<dimension>(step);
+		break;
+	case CONTINUOUS_DISTANCE:
+		while (i*dis < level)
+			i++;
+		if (RandomSchrage() > 0.5)
+		{
+			coordinates[i - 1] += l;
+		}
+		else
+		{
+			coordinates[i - 1] -= l;
+		}
+		break;
+	case CONTINUOUS_ALL:
+		coordinates += RandomVectorOnBall<dimension>(l);
+		break;
+	}
+	return *this;
+
+}
