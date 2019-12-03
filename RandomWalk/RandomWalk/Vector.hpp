@@ -47,7 +47,7 @@ public:
 		coordinates = new double[dimension]();
 		for (int i = 0; i < dimension; i++)
 		{
-			if (i<list.size())
+			if (i < list.size())
 			{
 				coordinates[i] = *(list.begin() + i);
 			}
@@ -125,14 +125,19 @@ public:
 		return get_cor(i);
 	}
 
-	double length() const
+	inline double length_square() const
 	{
 		double result = 0;
 		for (int i = 0; i < dimension; i++)
 		{
 			result += coordinates[i] * coordinates[i];
 		}
-		return sqrt(result);
+		return result;
+	}
+
+	inline double length() const
+	{
+		return sqrt(length_square());
 	}
 
 
@@ -260,14 +265,6 @@ inline bool operator==(const Vector<dimension>& l, const Vector<dimension>& r)//
 		}
 	}
 	return true;
-	//for (int i = 0; i < dimension; i++)
-	//{
-	//	if (l[i]!=r[i])
-	//	{
-	//		return false;
-	//	}
-	//}
-	//return true;
 }
 
 template<unsigned dimension>
@@ -315,3 +312,5 @@ Vector<dim> RandomVectorOnGridBall(double length = 1)//在格点球上均匀分布的矢量
 	}
 	return temp;
 }
+
+

@@ -24,19 +24,22 @@
     <ClInclude Include="Field.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Particle.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="RandomJS.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Rod.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleRM.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,13 +50,16 @@
     <ClCompile Include="RandomNumberJS.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="animation.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="dimension_move.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DLA.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BrownianMovement.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

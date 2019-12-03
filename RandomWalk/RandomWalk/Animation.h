@@ -105,3 +105,8 @@ struct CPUAnimBitmap {
 		glutSwapBuffers();
 	} 
 };
+
+struct DataBlock
+{
+	CPUAnimBitmap *bitmap;
+};

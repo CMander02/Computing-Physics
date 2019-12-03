@@ -1,5 +1,5 @@
 #pragma once
-#include"Particle.h"
+#include"ParticleRM.h"
 
 
 template<unsigned dimension>
@@ -12,8 +12,8 @@ public:
 	void move(MOVE_TYPE type=CONTINUOUS_DIRECTION)
 	{
 
-		Particle<dimension> tempa = center.get_position() + 1.0 / 2 * length*direction;
-		Particle<dimension> tempb = center.get_position() - 1.0 / 2 * length*direction;
+		ParticleRM<dimension> tempa = center.get_position() + 1.0 / 2 * length*direction;
+		ParticleRM<dimension> tempb = center.get_position() - 1.0 / 2 * length*direction;
 
 		tempa.move(type);
 		tempb.move(type);
@@ -36,7 +36,7 @@ public:
 
 //private:
 
-	Particle<dimension> center;
+	ParticleRM<dimension> center;
 	Vector<dimension> direction;
 
 	double length = 3;

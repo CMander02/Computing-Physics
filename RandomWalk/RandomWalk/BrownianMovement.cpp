@@ -1,6 +1,6 @@
 #include<iostream>
-#include"Particle.h"
-#include"Vector.h"
+#include"ParticleRM.h"
+#include"Vector.hpp"
 #include<GL/glut.h>
 using namespace std;
 #include"Animation.h"
@@ -8,9 +8,8 @@ using namespace std;
 #define NUM 100000
 
 #define MAPSIZE 1024
-Particle<dim> p[NUM];
 
-
+//static ParticleRM<dim> p[NUM];
 
 void cleanup() {}
 
@@ -28,10 +27,10 @@ int calc_offset(int x,int y)
 		return center + x + y * MAPSIZE;
 	}
 }
+////
+////以下内容代表了单粒子随机行走情况的绘制
 //
-//}
-//
-//void generate_frame(DataBlock *d, int ticks)
+//void generate_frame_single_ParticleRM(DataBlock *d, int ticks)
 //{
 //	
 //	CPUAnimBitmap *map = d->bitmap;
@@ -72,5 +71,5 @@ int calc_offset(int x,int y)
 //	CPUAnimBitmap bitmap(MAPSIZE, MAPSIZE, &data);
 //	data.bitmap = &bitmap;
 //
-//	bitmap.anim_and_exit((void(*)(void*, int))generate_frame, (void(*)(void*))cleanup);
+//	bitmap.anim_and_exit((void(*)(void*, int))generate_frame_single_ParticleRM, (void(*)(void*))cleanup);
 //}

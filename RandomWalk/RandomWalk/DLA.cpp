@@ -1,5 +1,5 @@
-#include"Particle.h"
-#include"Vector.h"
+#include"ParticleRM.h"
+#include"Vector.hpp"
 #include<vector>
 #include<utility>
 #include<algorithm>
@@ -13,36 +13,33 @@ using randomjs::RandomSchrage;
 
 using namespace std;
 
-struct DataBlock
-{
-	CPUAnimBitmap *bitmap;
-};
+
 
 void cleanup();
 
 int calc_offset(int x, int y);
 
-vector<Particle<2>> vec(1, Particle<2>({ 0,0 }));
-vector<Particle<2>>::iterator iter = vec.begin();
-Particle<2> now({ 1,1 });
-const int particles_per_frame = 50;
+vector<ParticleRM<2>> vec(1, ParticleRM<2>({ 0,0 }));
+vector<ParticleRM<2>>::iterator iter = vec.begin();
+ParticleRM<2> now({ 1,1 });
+const int ParticleRMs_per_frame = 50;
 ofstream out("C:\\Users\\10069\\Desktop\\fractal.txt");
 
-void generate_frame(DataBlock *d, int ticks)
+void generate_frame_DLA(DataBlock *d, int ticks)
 {
 	CPUAnimBitmap *map = d->bitmap;
 	int i = 0;
 
-	while (i < particles_per_frame)
+	while (i < ParticleRMs_per_frame)
 	{
-		Particle<2> temp = now;
+		ParticleRM<2> temp = now;
 		if (find(vec.begin(), vec.end(), now.move()) != vec.end()&&RandomSchrage()<1.1)//如果粒子黏附到了已有体系上
 		{
 			vec.push_back(temp);
 
 			//查找最远点的次数要减少以提高性能！
 			iter = max_element(vec.begin(), vec.end(),
-				[](Particle<2> &a, Particle<2> &b)->bool {return a.get_position().length() < b.get_position().length(); });//找到离原点最远的粒子的位置
+				[](ParticleRM<2> &a, ParticleRM<2> &b)->bool {return a.get_position().length() < b.get_position().length(); });//找到离原点最远的粒子的位置
 			now = RandomVectorOnGridBall<2>(iter->get_position().length());
 
 			double circle_size = iter->get_position().length()*iter->get_position().length();
@@ -69,11 +66,11 @@ void generate_frame(DataBlock *d, int ticks)
 	}
 }
 
-int main()
+void DLA()
 {
 	DataBlock data;
 	CPUAnimBitmap bitmap(MAPSIZE, MAPSIZE, &data);
 	data.bitmap = &bitmap;
-	bitmap.anim_and_exit((void(*)(void*, int))generate_frame, (void(*)(void*))cleanup);
+	bitmap.anim_and_exit((void(*)(void*, int))generate_frame_DLA, (void(*)(void*))cleanup);
 	system("pause");
 }

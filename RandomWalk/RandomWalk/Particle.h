@@ -1,106 +1,107 @@
-#pragma once
+#ifndef PARTICLE
+#define PARTICLE
 
-#include"Field.h"
-#include"RandomJS.h"
-#include<initializer_list>
-#include<iostream>
-#include"Vector.h"
-using namespace randomjs;
+#include"ParticleRM.h"
 
-enum MOVE_TYPE
-{
-	ON_GRID, CONTINUOUS_DIRECTION, CONTINUOUS_DISTANCE, CONTINUOUS_ALL
-};//四种类型的意义大约写得和丁老师的讲义一样令人易于理解，不需要做任何解释
-
-template<unsigned dimension>
-class Particle
+template<unsigned int dimension>
+class Particle:public ParticleRM<dimension>
 {
 public:
-	Particle() = default;//不提供任何构造函数，静待系统合成
 
-	Particle(std::initializer_list<double> list) :coordinates(list) {}
-	Particle(Vector<dimension> &in_vec):coordinates(in_vec) {}
-	Particle(Vector<dimension> &&in_vec) :coordinates(std::move(in_vec)) {}
+	Particle() = default;
+	Particle(const Vector<dimension>&c, const Vector<dimension>&v) :ParticleRM(c),velocity(v) {}
+	Particle(const Vector<dimension>&&c, const Vector<dimension>&v) :ParticleRM(std::move(c)),velocity(v) {}
+	Particle(const Vector<dimension>&c, const Vector<dimension>&&v) :ParticleRM(c), velocity(std::move(v)) {}
+	Particle(const Vector<dimension>&&c, const Vector<dimension>&&v) :ParticleRM(std::move(c)), velocity(std::move(v)) {}
+	Particle(const Particle& p) { this->step = p.step, this->coordinates = p.coordinates; }
+	Particle(Particle&& p) { this->step = p.step, this->coordinates = std::move(p.coordinates); }
 
-	Particle& operator= (const Particle& p) { step = p.step; coordinates = p.coordinates; return *this; }
-	Particle& operator= (const Particle&& p) { step = p.step; coordinates = std::move(p.coordinates); return *this; }
+	Particle& operator= (const Particle& p);
+	Particle& operator= (const Particle&& p);
+	Particle& move(double tick = 1.0);
+	Particle<dimension>& move_random(MOVE_TYPE type = ON_GRID);
+
+	Particle<dimension> accelerate(const Vector<dimension>& delta_v);
+	Particle<dimension> accelerate(Vector<dimension>&& delta_v);
+
+	Particle& set_mass(double m);
+	double kinetic_energy();
 
 
-	Particle(const Particle& p) :step(p.step), coordinates(p.coordinates) {}
-	Particle(Particle&& p) :step(p.step), coordinates(std::move(p.coordinates)) {}
-
-	~Particle() = default;
-
-	Particle& move(MOVE_TYPE type = ON_GRID)//未来有继承此类的考虑
-	{
-		double dis = 1.0 / dimension;
-		int i = 0;
-		double level = RandomFibonacci();//随机选取一个维度进行行走
-		double l = step * RandomSchrage();
-
-		switch (type)
-		{
-		case ON_GRID:
-			while (i*dis < level)
-				i++;
-			if (RandomSchrage() > 0.5)
-			{
-				coordinates[i - 1] += step;
-			}
-			else
-			{
-				coordinates[i - 1] -= step;
-			}
-			break;
-		case CONTINUOUS_DIRECTION:
-			coordinates += step * RandomVectorOnBall<dimension>()*(2 * RandomSchrage() - 1);
-			break;
-		case CONTINUOUS_DISTANCE:
-			while (i*dis < level)
-				i++;
-			if (RandomSchrage() > 0.5)
-			{
-				coordinates[i - 1] += l;
-			}
-			else
-			{
-				coordinates[i - 1] -= l;
-			}
-			break;
-		case CONTINUOUS_ALL:
-			coordinates += l * RandomVectorOnBall<dimension>()*(2 * RandomSchrage() - 1);
-			break;
-		}
-		return *this;
-
-	}
-	//virtual void move(Field<dimension>&);
-
-	double operator[](int i)
-	{
-		return coordinates[i];
-	}
-
-	Vector<dimension>& get_position()
-	{
-		return coordinates;
-	}
-
-	Vector<dimension> get_position() const
-	{
-		return coordinates;
-	}
-
-	bool operator==(const Particle& r)
-	{
-		return coordinates == r.coordinates;
-	}
 
 private:
-	
 
-	double step = 1;
+	Vector<dimension> velocity;
+	double mass;
 
-	Vector<dimension> coordinates;
-	
 };
+
+
+
+
+#endif // !PARTICLE
+
+template<unsigned int dimension>
+Particle<dimension>& Particle<dimension>::operator=(const Particle & p)
+{
+	this->step = p.step;
+	this->coordinates = p.coordinates;
+	mass = p.mass;
+	velocity = std::move(p.velocity);
+	return *this;
+}
+
+template<unsigned int dimension>
+Particle<dimension>& Particle<dimension>::operator=(const Particle && p)
+{
+	this->step = p.step;
+	this->mass = p.mass;
+	this->velocity = std::move(p.velocity);
+	this->coordinates = std::move(p.coordinates); return *this;
+}
+
+template<unsigned int dimension>
+Particle<dimension>& Particle<dimension>::move(double tick)
+{
+	this->get_position() += velocity * tick;
+	return *this;
+}
+
+template<unsigned int dimension>
+Particle<dimension>& Particle<dimension>::move_random(MOVE_TYPE type)
+{
+	ParticleRM<dimension>::move(type);
+	return *this;
+}
+
+template<unsigned int dimension>
+inline Particle<dimension> Particle<dimension>::accelerate(const Vector<dimension>& delta_v)
+{
+	this->velocity += delta_v;
+	return *this;
+}
+
+template<unsigned int dimension>
+inline Particle<dimension> Particle<dimension>::accelerate(Vector<dimension>&& delta_v)
+{
+	this->velocity += std::move(delta_v);
+	return *this;
+}
+
+template<unsigned int dimension>
+Particle<dimension> & Particle<dimension>::set_mass(double m)
+{
+	if (m<0)
+	{
+		std::cerr << "Negative mass!" << std::endl;
+		return *this;
+	}
+	this->mass = m;
+	return *this;
+}
+
+template<unsigned int dimension>
+double Particle<dimension>::kinetic_energy()
+{
+	return 1 / 2.0*velocity.length_square()*mass;
+}

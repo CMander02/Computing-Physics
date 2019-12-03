@@ -1,5 +1,5 @@
 //#include<iostream>
-//#include"Particle.h"
+//#include"ParticleRM.h"
 //#include<fstream>
 //#include<algorithm>
 //#include"Rod.h"
@@ -9,11 +9,11 @@
 //
 //const unsigned dim =12;
 //
-//Particle<dim> a[N];
+//ParticleRM<dim> a[N];
 //
-//bool at_zero_point(Particle<dim> &a)
+//bool at_zero_point(ParticleRM<dim> &a)
 //{
-//	return a.get_position() == Particle<dim>().get_position();
+//	return a.get_position() == ParticleRM<dim>().get_position();
 //}
 //
 //void dimension_move()
