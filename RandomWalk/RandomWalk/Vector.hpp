@@ -40,11 +40,11 @@ public:
 	//¿½±´¿ØÖÆ
 	Vector()
 	{
-		coordinates = new double[dimension]();
+		coordinates = new double[dimension];
 	}
 	Vector(initializer_list<double> list)
 	{
-		coordinates = new double[dimension]();
+		coordinates = new double[dimension];
 		for (int i = 0; i < dimension; i++)
 		{
 			if (i < list.size())

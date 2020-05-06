@@ -12,15 +12,15 @@ const int epoch = 1000000;
 Particle<dim> p[BATCH_SIZE];
 int main()
 {
-	ofstream fdemon("C:\\Users\\10069\\Desktop\\demon_10000_10_1_l.txt");
-	ofstream fenerg("C:\\Users\\10069\\Desktop\\energ_10000_10_1_l.txt");
+	ofstream fdemon("C:\\Users\\10069\\Desktop\\demon_10000_50_1_l.txt");
+	ofstream fenerg("C:\\Users\\10069\\Desktop\\energ_10000_50_1_l.txt");
 
 	double demon = 0;
 
 	double total = 0;
 	for (int i = 0; i < BATCH_SIZE; i++)
 	{
-		p[i].set_kinetic_energy(100);//初始能量的设定
+		p[i].set_kinetic_energy(50);//初始能量的设定
 	}
 
 	for (int i = 0; i < epoch;)
